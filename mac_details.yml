@@ -1,0 +1,19 @@
+---
+- name: query rest api to get the vendor information of a mac address
+  hosts: localhost
+  gather_facts: no
+  vars:
+    mac: 44:38:39:ff:ef:57
+    token: at_XhxsL4tnfHMV79WR3Nv6MThkhaxA9
+  tasks:
+  - uri:
+      url: "https://api.macaddress.io/v1?output=json&search={{ mac }}"
+      method: GET
+      return_content: yes
+      body_format: json
+      headers:
+        X-Authentication-Token: "{{ token }}"
+    register: result
+
+  - name: The company name for the mac address {{ mac }}
+    debug: var=result.json.vendorDetails.companyName
